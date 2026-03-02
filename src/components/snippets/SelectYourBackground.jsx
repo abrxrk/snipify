@@ -104,7 +104,7 @@ export function SelectYourBackground({
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className="max-w-2xl max-h-[85vh] p-0 gap-0 overflow-hidden">
+      <DialogContent className="flex h-[85dvh] w-[calc(100vw-2rem)] max-w-2xl flex-col overflow-hidden p-0 gap-0 sm:h-[90dvh]">
         <DialogHeader className="px-6 pt-6 pb-4 border-b">
           <DialogTitle className="flex items-center gap-2">
             <Palette className="h-5 w-5 text-primary" />
@@ -115,7 +115,11 @@ export function SelectYourBackground({
           </DialogDescription>
         </DialogHeader>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
+        <Tabs
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="flex min-h-0 flex-1 flex-col"
+        >
           <div className="px-6 py-3 border-b bg-muted/30">
             <TabsList className="grid w-full max-w-md mx-auto grid-cols-2">
               <TabsTrigger value="presets" className="gap-2">
@@ -129,9 +133,9 @@ export function SelectYourBackground({
             </TabsList>
           </div>
 
-          <div className="flex-1 overflow-hidden">
-            <TabsContent value="presets" className="m-0 h-full data-[state=active]:flex flex-col">
-              <ScrollArea className="flex-1 px-6 py-4">
+          <div className="flex h-full min-h-0 flex-1 overflow-hidden">
+            <TabsContent value="presets" className="m-0 h-full min-h-0 data-[state=active]:flex flex-col overflow-hidden">
+              <ScrollArea className="h-full w-full px-6 py-4" type="always">
                 <div className="space-y-4">
                   <p className="text-sm text-muted-foreground">
                     Choose from {BACKGROUND_TEMPLATES.length} beautifully crafted gradient backgrounds.
@@ -144,13 +148,13 @@ export function SelectYourBackground({
               </ScrollArea>
             </TabsContent>
 
-            <TabsContent value="custom" className="m-0 h-full data-[state=active]:flex flex-col">
-              <ScrollArea className="flex-1 px-6 py-4">
+            <TabsContent value="custom" className="m-0 h-full min-h-0 data-[state=active]:flex flex-col overflow-hidden">
+              <div className="h-full min-h-0 w-full overflow-y-auto overscroll-contain px-6 py-4">
                 <CustomGradientMaker
                   onApply={handleGradientSelect}
                   initialGradient={selectedGradient}
                 />
-              </ScrollArea>
+              </div>
             </TabsContent>
           </div>
         </Tabs>

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Roboto, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import "prismjs/themes/prism-tomorrow.css";
 
 const roboto = Roboto({
   variable: "--font-roboto",

@@ -177,7 +177,7 @@ export function CustomGradientMaker({
   };
 
   return (
-    <div className={cn("space-y-6", className)}>
+    <div className={cn("space-y-6 pb-1", className)}>
       {/* Preview */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">
@@ -230,7 +230,7 @@ export function CustomGradientMaker({
               Randomize
             </Button>
           </div>
-          <div className="grid grid-cols-4 gap-2">
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
             {PRESET_GRADIENTS.map((preset, index) => (
               <GradientPreview
                 key={index}
@@ -274,7 +274,7 @@ export function CustomGradientMaker({
         </div>
 
         {/* Colors */}
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <ColorPicker
             label="From Color"
             value={fromColor}

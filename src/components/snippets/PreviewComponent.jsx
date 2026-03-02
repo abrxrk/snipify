@@ -2,52 +2,32 @@
 
 import * as React from "react";
 import { cn } from "@/lib/utils";
+import Prism from "prismjs";
+import "prismjs/components/prism-markup-templating";
+import "prismjs/components/prism-markup";
+import "prismjs/components/prism-javascript";
+import "prismjs/components/prism-typescript";
+import "prismjs/components/prism-jsx";
+import "prismjs/components/prism-tsx";
+import "prismjs/components/prism-python";
+import "prismjs/components/prism-java";
+import "prismjs/components/prism-c";
+import "prismjs/components/prism-cpp";
+import "prismjs/components/prism-csharp";
+import "prismjs/components/prism-go";
+import "prismjs/components/prism-rust";
+import "prismjs/components/prism-swift";
+import "prismjs/components/prism-kotlin";
+import "prismjs/components/prism-ruby";
+import "prismjs/components/prism-php";
+import "prismjs/components/prism-css";
+import "prismjs/components/prism-sql";
+import "prismjs/components/prism-bash";
+import "prismjs/components/prism-json";
+import "prismjs/components/prism-yaml";
+import "prismjs/components/prism-markdown";
 
-// Import PrismJS core styles
-import "prismjs/themes/prism-tomorrow.css";
-
-let prismLoaderPromise = null;
-
-async function loadPrism() {
-  if (typeof window === "undefined") return null;
-  if (prismLoaderPromise) return prismLoaderPromise;
-
-  prismLoaderPromise = (async () => {
-    const prismModule = await import("prismjs");
-    const Prism = prismModule.default ?? prismModule;
-    Prism.manual = true;
-
-    await Promise.all([
-      import("prismjs/components/prism-markup-templating"),
-      import("prismjs/components/prism-markup"),
-      import("prismjs/components/prism-javascript"),
-      import("prismjs/components/prism-typescript"),
-      import("prismjs/components/prism-jsx"),
-      import("prismjs/components/prism-tsx"),
-      import("prismjs/components/prism-python"),
-      import("prismjs/components/prism-java"),
-      import("prismjs/components/prism-c"),
-      import("prismjs/components/prism-cpp"),
-      import("prismjs/components/prism-csharp"),
-      import("prismjs/components/prism-go"),
-      import("prismjs/components/prism-rust"),
-      import("prismjs/components/prism-swift"),
-      import("prismjs/components/prism-kotlin"),
-      import("prismjs/components/prism-ruby"),
-      import("prismjs/components/prism-php"),
-      import("prismjs/components/prism-css"),
-      import("prismjs/components/prism-sql"),
-      import("prismjs/components/prism-bash"),
-      import("prismjs/components/prism-json"),
-      import("prismjs/components/prism-yaml"),
-      import("prismjs/components/prism-markdown"),
-    ]);
-
-    return Prism;
-  })();
-
-  return prismLoaderPromise;
-}
+Prism.manual = true;
 
 function WindowControls({ variant = "mac", isExport = false }) {
   if (variant === "mac") {
@@ -108,25 +88,6 @@ export function PreviewComponent({
   className,
   isExport = false,
 }) {
-  const codeRef = React.useRef(null);
-
-  React.useEffect(() => {
-    let active = true;
-
-    const highlight = async () => {
-      if (!codeRef.current || !code) return;
-      const Prism = await loadPrism();
-      if (!active || !Prism || !codeRef.current) return;
-      Prism.highlightElement(codeRef.current);
-    };
-
-    highlight();
-
-    return () => {
-      active = false;
-    };
-  }, [code, language]);
-
   const getBackgroundStyle = () => {
     if (gradient) {
       return { background: gradient.cssValue || gradient };
@@ -171,6 +132,26 @@ export function PreviewComponent({
 
   const currentTheme = themeStyles[theme] || themeStyles.dark;
   const prismLanguage = LANGUAGE_MAP[language] || "javascript";
+  const highlightedCode = React.useMemo(() => {
+    const sourceCode = code || "";
+    const grammar = Prism.languages[prismLanguage] || Prism.languages.javascript;
+
+    if (!grammar) {
+      return sourceCode
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;");
+    }
+
+    try {
+      return Prism.highlight(sourceCode, grammar, prismLanguage);
+    } catch {
+      return sourceCode
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;");
+    }
+  }, [code, prismLanguage]);
 
   // Generate line numbers if enabled
   const lineNumbers = showLineNumbers && code
@@ -245,14 +226,12 @@ export function PreviewComponent({
               <div className="flex-1 min-w-0 overflow-x-auto">
                 <pre className="m-0! p-0! bg-transparent!">
                   <code
-                    ref={codeRef}
                     className={cn(
                       `language-${prismLanguage} leading-relaxed! font-mono! bg-transparent! p-0! m-0! whitespace-pre block`,
                       isExport ? "text-sm!" : "text-[10px] sm:text-sm!"
                     )}
-                  >
-                    {code || ""}
-                  </code>
+                    dangerouslySetInnerHTML={{ __html: highlightedCode }}
+                  />
                 </pre>
               </div>
             </div>
