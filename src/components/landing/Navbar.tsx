@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Code2, Menu, X } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
@@ -12,6 +13,7 @@ const navLinks = [
 ];
 
 export function Navbar() {
+  const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -64,6 +66,7 @@ export function Navbar() {
           {/* CTA */}
           <div className="hidden md:flex items-center gap-3">
             <Button
+              onClick={() => router.push("/snippets")}
               size="sm"
               className="bg-[#01295F] text-white hover:bg-[#01295F]/90 shadow-sm"
             >
@@ -95,7 +98,14 @@ export function Navbar() {
               </Link>
             ))}
             <div className="flex flex-col gap-2 pt-2 border-t border-neutral-100">
-              <Button size="sm" className="w-full bg-[#01295F] text-white hover:bg-[#01295F]/90">
+              <Button
+                size="sm"
+                onClick={() => {
+                  setMobileOpen(false);
+                  router.push("/snippets");
+                }}
+                className="w-full bg-[#01295F] text-white hover:bg-[#01295F]/90"
+              >
                 Let&apos;s go
               </Button>
             </div>
