@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Roboto, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import "prismjs/themes/prism-tomorrow.css";
+import { Analytics } from "@vercel/analytics/react";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -30,6 +31,7 @@ export default function RootLayout({
         className={`${roboto.variable} ${geistMono.variable} antialiased font-sans`}
       >
         {children}
+        <Analytics />
       </body>
     </html>
   );
